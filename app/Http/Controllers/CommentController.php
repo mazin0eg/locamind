@@ -2,41 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Question;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
     /**
-     * Store a newly created comment in storage.
+     * Display a listing of the resource.
      */
-    public function store(Request $request, Question $question)
+    public function index()
     {
-        $request->validate([
-            'body' => 'required|string',
-        ]);
-
-        Comment::create([
-            'user_id' => Auth::id(),
-            'question_id' => $question->id,
-            'body' => $request->body,
-        ]);
-
-        return redirect()->route('questions.show', $question)->with('success', 'Comment added successfully.');
+        //
     }
 
     /**
-     * Remove the specified comment from storage.
+     * Show the form for creating a new resource.
      */
-    public function destroy(Comment $comment)
+    public function create()
     {
-        if (Auth::id() !== $comment->user_id) {
-            abort(403, 'Unauthorized action.');
-        }
+        //
+    }
 
-        $comment->delete();
-        return redirect()->back()->with('success', 'Comment deleted successfully.');
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }
