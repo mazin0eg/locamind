@@ -2,63 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created comment in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'body' => 'required|string',
+        ]);
+
+        Comment::create([
+            'user_id' => Auth::id(),
+            'question_id' => $request->question_id,
+            'body' => $request->body,
+        ]);
+
+        return back()->with('success', 'Comment added successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified comment.
      */
-    public function show(string $id)
+    public function edit(Comment $comment)
     {
-        //
+        if (Auth::id() !== $comment->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('comments.edit', compact('comment'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified comment in storage.
      */
-    public function edit(string $id)
+    public function update(Request $request, Comment $comment)
     {
-        //
+        if (Auth::id() !== $comment->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'body' => 'required|string',
+        ]);
+
+        $comment->update([
+            'body' => $request->body,
+        ]);
+
+        return back()->with('success', 'Comment updated successfully.');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified comment from storage.
      */
-    public function update(Request $request, string $id)
+    public function destroy(Comment $comment)
     {
-        //
-    }
+        if (Auth::id() !== $comment->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $comment->delete();
+        return back()->with('success', 'Comment deleted successfully.');
     }
 }

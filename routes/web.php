@@ -26,5 +26,5 @@ require __DIR__.'/auth.php';
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::resource('questions', QuestionController::class)->middleware(['auth']);
-Route::post('comments', [CommentController::class, 'store'])->middleware(['auth'])->name('comments.store');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');

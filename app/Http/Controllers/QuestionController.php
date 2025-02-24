@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
 
 class QuestionController extends Controller
 {
@@ -13,7 +14,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user')->latest()->paginate(10);
+        $questions = Question::where('user_id', Auth::id())->latest()->paginate(10);
+    
         return view('questions.index', compact('questions'));
     }
 
@@ -98,4 +100,6 @@ class QuestionController extends Controller
         $question->delete();
         return redirect()->route('questions.index')->with('success', 'Question deleted successfully.');
     }
+
+
 }
